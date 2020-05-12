@@ -1,15 +1,16 @@
 const express = require('express')
 const app = express()
+const db = require('./config/db')
+const consign = require('consign')
 
-app.get('/', (req, res, next) => {
-    console.log('func 1')
-    res.status(200).send('Meu Backend')
-    next()
-})
-app.get('/', (req, res, next) => {
-    console.log('func 2')
-    res.status(200).send('Meu Backend2')
-})
+consign()
+    .include('./config/passport.js')
+    .then('./config/middlewares.js')
+    .then('./api')
+    .then('./config/routes.js')
+    .into(app)
+
+app.db = db
 
 app.listen(3000,() =>{
     console.log('Backend executando...')
